@@ -1,0 +1,11 @@
+# Local design references and macOS metadata
+_docs/
+.DS_Store
+
+# Editor and local environment files
+.vscode/
+.idea/
+.wrangler/
+.env
+.env.*
+!.env.example
