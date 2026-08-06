@@ -37,7 +37,7 @@ body{
   font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size:14px; line-height:1.7;
 }
-main{max-width:1060px; margin:0 auto; padding:56px 48px}
+main{max-width:800px; margin:0 auto; padding:72px 64px}
 a{color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
 .runhead,footer{display:flex; justify-content:space-between; font-size:12px; color:var(--muted)}
 footer{margin-top:56px}
@@ -50,7 +50,7 @@ p.aside{color:var(--muted)}
   --n:20;
   display:grid; grid-template-columns:repeat(var(--n),var(--cs));
   grid-auto-rows:var(--cs); gap:0; width:max-content;
-  --cs:clamp(22px,calc((100vw - 96px - 24px)/var(--n)),34px);
+  --cs:clamp(22px,calc((min(100vw,800px) - 128px - 24px)/var(--n)),34px);
   user-select:none; -webkit-user-select:none;
   outline:none;
 }
