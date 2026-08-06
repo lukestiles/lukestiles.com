@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Stiles — 404</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#FBFAF7; --ink:#2B2A26; --muted:#75716A; --accent:#92642F; --head:#2B2A26;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#16150F; --ink:#D6D2C8; --muted:#8B867A; --accent:#C79A5B; --head:#E6E2D8; }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'JetBrains Mono',monospace; font-size:14.5px; line-height:1.75;
+}
+main{max-width:800px; margin:0 auto; padding:72px 64px}
+a{color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+.runhead, footer{display:flex; justify-content:space-between; font-size:12px; color:var(--muted)}
+footer{margin-top:64px}
+h2{margin:44px 0 0; font-size:inherit; font-weight:700; letter-spacing:0.06em; color:var(--head)}
+p{margin:10px 0 0; padding-left:24px}
+p.aside{color:var(--muted)}
+@media (max-width: 480px){
+  body{font-size:13px; line-height:1.7}
+  main{padding:48px 24px}
+  .runhead, footer{font-size:11px}
+  h2{margin-top:36px}
+  p{margin-top:8px; padding-left:14px}
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="runhead"><span>404</span><span>Error Manual</span><span>404</span></div>
+
+  <h2>NAME</h2>
+  <p>404 — page not found.</p>
+
+  <h2>DIAGNOSTICS</h2>
+  <p>No manual entry for <span id="path">that page</span>.</p>
+  <p class="aside">The page may have moved, or it may never have existed. Both are fine.</p>
+
+  <h2>SEE ALSO</h2>
+  <p><a href="/">lukestiles(1)</a> — the man himself.<br><a href="/crossword.html">lukestiles(6)</a> — the crossword.</p>
+
+  <h2>EXIT STATUS</h2>
+  <p>404 — not found.</p>
+
+  <footer><span>lukestiles.com</span><span>August 2026</span></footer>
+</main>
+<script>
+  var p = document.getElementById("path");
+  if (location.pathname && location.pathname !== "/404.html") p.textContent = location.pathname;
+</script>
+</body>
+</html>
