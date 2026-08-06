@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Stiles — crossword</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",p.onerror=function(){p=null},(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="an ln init xn Cn Br kn In capture Fn nn calculateEventProperties On register register_once register_for_session unregister unregister_for_session Ln getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Dn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty An Rn createPersonProfile setInternalOrTestUser $n yn jn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing Tn debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric pn".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('phc_xvMJH2hgsjLrAYha4HQXGo9jCh6JUTkNVzVf3RGh5Uew', {
+    api_host: 'https://us.i.posthog.com',
+    defaults: '2026-05-30',
+    person_profiles: 'identified_only',
+  });
+</script>
+<style>
+:root{
+  --bg:#FBFAF7; --ink:#2B2A26; --muted:#75716A; --accent:#92642F; --head:#2B2A26;
+  --cell:#FFFFFF; --cellline:#C9C4B8; --sel:#F0E2CE; --selword:#F7F0E3; --wrong:#A8362B;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#16150F; --ink:#D6D2C8; --muted:#8B867A; --accent:#C79A5B; --head:#E6E2D8;
+    --cell:#201E16; --cellline:#4A463C; --sel:#4A3A22; --selword:#2C2719; --wrong:#D96C5F; }
+}
+:root[data-theme="dark"]{ --bg:#16150F; --ink:#D6D2C8; --muted:#8B867A; --accent:#C79A5B; --head:#E6E2D8;
+  --cell:#201E16; --cellline:#4A463C; --sel:#4A3A22; --selword:#2C2719; --wrong:#D96C5F; }
+:root[data-theme="light"]{ --bg:#FBFAF7; --ink:#2B2A26; --muted:#75716A; --accent:#92642F; --head:#2B2A26;
+  --cell:#FFFFFF; --cellline:#C9C4B8; --sel:#F0E2CE; --selword:#F7F0E3; --wrong:#A8362B; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:14px; line-height:1.7;
+}
+main{max-width:1060px; margin:0 auto; padding:56px 48px}
+a{color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
+.runhead,footer{display:flex; justify-content:space-between; font-size:12px; color:var(--muted)}
+footer{margin-top:56px}
+h2{margin:40px 0 0; font-size:inherit; font-weight:700; letter-spacing:0.06em; color:var(--head)}
+h2:first-of-type{margin-top:44px}
+p{margin:10px 0 0; padding-left:24px; max-width:66ch}
+p.aside{color:var(--muted)}
+.board-wrap{margin:14px 0 0; padding-left:24px; overflow-x:auto}
+.board{
+  --n:20;
+  display:grid; grid-template-columns:repeat(var(--n),var(--cs));
+  grid-auto-rows:var(--cs); gap:0; width:max-content;
+  --cs:clamp(22px,calc((100vw - 96px - 24px)/var(--n)),34px);
+  user-select:none; -webkit-user-select:none;
+  outline:none;
+}
+.cell{
+  position:relative; width:var(--cs); height:var(--cs);
+  background:var(--cell); border:1px solid var(--cellline);
+  margin:0 -1px -1px 0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:calc(var(--cs)*0.52); font-weight:700; color:var(--ink);
+  cursor:pointer;
+}
+.cell.blk{background:transparent; border-color:transparent; cursor:default}
+.cell .num{
+  position:absolute; top:1px; left:3px;
+  font-size:calc(var(--cs)*0.28); font-weight:400; color:var(--muted); line-height:1;
+}
+.cell.inword{background:var(--selword)}
+.cell.cursor{background:var(--sel); outline:2px solid var(--accent); outline-offset:-2px; z-index:1}
+.cell.wrong{color:var(--wrong); text-decoration:line-through; text-decoration-thickness:2px}
+.cell.revealed .num{color:var(--accent)}
+.opts{margin:12px 0 0; padding-left:24px; display:flex; flex-wrap:wrap; gap:8px 10px}
+.opts button{
+  font:inherit; font-size:13px; color:var(--accent);
+  background:none; border:1px solid var(--cellline); border-radius:0;
+  padding:4px 12px; cursor:pointer;
+}
+.opts button:hover{border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+.cluecols{margin:12px 0 0; padding-left:24px; display:grid; grid-template-columns:1fr 1fr; gap:6px 40px; align-items:start}
+.cluecols h3{margin:0 0 4px; font-size:inherit; font-weight:700; letter-spacing:0.06em; color:var(--head)}
+.clue{display:grid; grid-template-columns:34px 1fr; column-gap:8px; padding:2px 6px 2px 2px; cursor:pointer}
+.clue .cn{color:var(--muted); text-align:right}
+.clue.active{background:var(--selword)}
+.clue.active .cn{color:var(--accent)}
+.clue.done{color:var(--muted)}
+.clue.done .ct{text-decoration:line-through; text-decoration-thickness:1px}
+#exitstatus{font-weight:700}
+#exitstatus.ok{color:var(--accent)}
+#kb{position:fixed; opacity:0; pointer-events:none; left:-1000px; top:0}
+@media (max-width:700px){
+  main{padding:40px 20px}
+  .cluecols{grid-template-columns:1fr}
+  .board{--cs:clamp(15px,calc((100vw - 40px - 14px)/var(--n)),34px)}
+  p,.board-wrap,.opts,.cluecols{padding-left:14px}
+}
+@media (prefers-reduced-motion: no-preference){
+  .cell{transition:background 80ms linear}
+}
+</style>
+
+</head>
+<body>
+<main>
+  <div class="runhead"><span>lukestiles(6)</span><span>Games Manual</span><span>lukestiles(6)</span></div>
+
+  <h2>NAME</h2>
+  <p>lukestiles-crossword — an interlocking index of Luke Stiles, compiled from linkedin.com/in/lukestiles and <a href="https://lukestiles.com">lukestiles.com</a>.</p>
+
+  <h2>SYNOPSIS</h2>
+  <p class="aside">Click a square, type. Click again to pivot between across and down. Arrow keys travel, backspace retreats, clues teleport.</p>
+
+  <h2>GRID</h2>
+  <div class="board-wrap"><div class="board" id="board" tabindex="0" aria-label="Crossword grid"></div></div>
+  <div class="opts">
+    <button id="check">--check</button>
+    <button id="revealletter">--reveal-letter</button>
+    <button id="revealall">--reveal-all</button>
+    <button id="reset">--reset</button>
+  </div>
+
+  <h2>CLUES</h2>
+  <div class="cluecols">
+    <div><h3>ACROSS</h3><div id="across"></div></div>
+    <div><h3>DOWN</h3><div id="down"></div></div>
+  </div>
+
+  <h2>SEE ALSO</h2>
+  <p><a href="index.html">lukestiles(1)</a> — the man himself.</p>
+
+  <h2>EXIT STATUS</h2>
+  <p id="exitstatus">1 — puzzle incomplete.</p>
+
+  <footer><span><a href="index.html">lukestiles.com</a></span><span>August 2026</span></footer>
+</main>
+<input id="kb" autocomplete="off" autocapitalize="characters" aria-hidden="true">
+
+<script>
+const WORDS = [{"a": "BOTS", "r": 0, "c": 16, "d": "A", "clue": "&ldquo;Basketball &amp; ___&rdquo; (2025 essay)"}, {"a": "SUBSTACK", "r": 0, "c": 19, "d": "D", "clue": "Platform hosting Ambient Distortion"}, {"a": "MOMENTUM", "r": 1, "c": 1, "d": "A", "clue": "Product ___, the podcast that booked Luke for episode 164"}, {"a": "EMPIRE", "r": 1, "c": 4, "d": "D", "clue": "&ldquo;___ Begins&rdquo; &mdash; 2010 feature Luke co-directed"}, {"a": "VIMEO", "r": 1, "c": 15, "d": "D", "clue": "Streaming home of &ldquo;Empire Begins&rdquo;"}, {"a": "GITHUB", "r": 2, "c": 14, "d": "A", "clue": "Home of the lukestiles repos"}, {"a": "MANPAGE", "r": 3, "c": 1, "d": "A", "clue": "Unix documentation format lukestiles.com is disguised as"}, {"a": "BASKETBALL", "r": 3, "c": 10, "d": "D", "clue": "&ldquo;___ &amp; Bots&rdquo;"}, {"a": "ADVISER", "r": 4, "c": 10, "d": "A", "clue": "Independent role held &ldquo;since forever&rdquo;"}, {"a": "DEMOCRACY", "r": 5, "c": 6, "d": "D", "clue": "Downtown for ___ (2004 voter-activation gig)"}, {"a": "LOVELESS", "r": 6, "c": 1, "d": "A", "clue": "My Bloody Valentine classic reviewed for Turntable Lab, c. 2002"}, {"a": "POPMATTERS", "r": 8, "c": 5, "d": "A", "clue": "Outlet that ran the Talking Heads and Blood Brothers reviews"}, {"a": "MASTERCARD", "r": 8, "c": 8, "d": "D", "clue": "&ldquo;Priceless Traveler&rdquo; client, 2010&ndash;11"}, {"a": "REFORGE", "r": 8, "c": 13, "d": "D", "clue": "School behind the Product Strategy and Growth certificates"}, {"a": "AGENTIC", "r": 8, "c": 17, "d": "D", "clue": "Like the production systems in the NAME line"}, {"a": "MONO", "r": 9, "c": 1, "d": "D", "clue": "JetBrains ___, the only typeface on lukestiles.com"}, {"a": "STILES", "r": 9, "c": 19, "d": "D", "clue": "Surname at the top of the man page"}, {"a": "FOREVER", "r": 10, "c": 0, "d": "A", "clue": "Length of the advising tenure, allegedly"}, {"a": "GENAI", "r": 11, "c": 15, "d": "A", "clue": "Portmanteau wave Luke keeps writing about"}, {"a": "COGNITIVE", "r": 13, "c": 11, "d": "A", "clue": "&ldquo;___ Security Is Real&rdquo;"}, {"a": "HUMANITY", "r": 15, "c": 5, "d": "A", "clue": "&ldquo;The Value of ___ Will Go Up&rdquo;"}, {"a": "FIXEDGEAR", "r": 17, "c": 4, "d": "A", "clue": "No-coasting NYC bike style of &ldquo;Empire Begins&rdquo;"}];
+const ROWS = 18, COLS = 20;
+
+// build solution grid
+const sol = Array.from({length:ROWS},()=>Array(COLS).fill(null));
+for(const w of WORDS){
+  const dr = w.d==="D"?1:0, dc = w.d==="A"?1:0;
+  for(let i=0;i<w.a.length;i++) sol[w.r+dr*i][w.c+dc*i] = w.a[i];
+}
+// numbering
+const num = {};
+let n = 0;
+for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+  if(!sol[r][c]) continue;
+  const sa = (c===0||!sol[r][c-1]) && c+1<COLS && sol[r][c+1];
+  const sd = (r===0||!sol[r-1][c]) && r+1<ROWS && sol[r+1][c];
+  if(sa||sd) num[r+","+c] = ++n;
+}
+for(const w of WORDS) w.n = num[w.r+","+w.c];
+
+const state = Array.from({length:ROWS},()=>Array(COLS).fill(""));
+try{
+  const saved = JSON.parse(localStorage.getItem("lukestiles6")||"null");
+  if(saved && saved.length===ROWS) for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++)
+    if(sol[r][c] && typeof saved[r][c]==="string") state[r][c]=saved[r][c];
+}catch(e){}
+
+const board = document.getElementById("board");
+const cells = {};
+for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+  const d = document.createElement("div");
+  if(sol[r][c]){
+    d.className = "cell";
+    d.dataset.r=r; d.dataset.c=c;
+    if(num[r+","+c]) d.innerHTML = '<span class="num">'+num[r+","+c]+'</span>';
+    const s = document.createElement("span");
+    s.className="ltr"; d.appendChild(s);
+    cells[r+","+c]=d;
+  }else d.className = "cell blk";
+  board.appendChild(d);
+}
+
+let cur = null, dir = "A";
+function wordCells(w){
+  const out=[]; const dr=w.d==="D"?1:0, dc=w.d==="A"?1:0;
+  for(let i=0;i<w.a.length;i++) out.push([w.r+dr*i, w.c+dc*i]);
+  return out;
+}
+function wordAt(r,c,d){
+  return WORDS.find(w=>w.d===d && wordCells(w).some(([rr,cc])=>rr===r&&cc===c));
+}
+function activeWord(){ return cur ? (wordAt(cur[0],cur[1],dir) || wordAt(cur[0],cur[1],dir==="A"?"D":"A")) : null; }
+
+const kb = document.getElementById("kb");
+function render(){
+  const aw = activeWord();
+  const awSet = new Set(aw?wordCells(aw).map(p=>p.join(",")):[]);
+  for(const key in cells){
+    const [r,c] = key.split(",").map(Number);
+    const el = cells[key];
+    el.querySelector(".ltr").textContent = state[r][c];
+    el.classList.toggle("inword", awSet.has(key));
+    el.classList.toggle("cursor", !!cur && cur[0]===r && cur[1]===c);
+    if(state[r][c]!==el.dataset.marked) el.classList.remove("wrong"), delete el.dataset.marked;
+  }
+  document.querySelectorAll(".clue").forEach(el=>{
+    const w = WORDS[el.dataset.i];
+    el.classList.toggle("active", aw===w);
+    el.classList.toggle("done", wordCells(w).every(([r,c])=>state[r][c]===sol[r][c]));
+  });
+  const full = WORDS.every(w=>wordCells(w).every(([r,c])=>state[r][c]));
+  const solved = WORDS.every(w=>wordCells(w).every(([r,c])=>state[r][c]===sol[r][c]));
+  const ex = document.getElementById("exitstatus");
+  if(solved){ ex.textContent = "0 — solved. every crossing agrees."; ex.classList.add("ok"); }
+  else { ex.textContent = full ? "1 — grid full, but at least one square disagrees. try --check." : "1 — puzzle incomplete."; ex.classList.remove("ok"); }
+  try{ localStorage.setItem("lukestiles6", JSON.stringify(state)); }catch(e){}
+}
+function setCur(r,c,toggle){
+  if(!sol[r][c]) return;
+  if(toggle && cur && cur[0]===r && cur[1]===c) dir = dir==="A"?"D":"A";
+  cur=[r,c];
+  if(!wordAt(r,c,dir)) dir = dir==="A"?"D":"A";
+  kb.value=""; kb.focus({preventScroll:true});
+  render();
+}
+function move(dr,dc){
+  if(!cur) return;
+  let [r,c]=cur;
+  do{ r+=dr; c+=dc; }while(r>=0&&r<ROWS&&c>=0&&c<COLS&&!sol[r][c]);
+  if(r>=0&&r<ROWS&&c>=0&&c<COLS&&sol[r][c]) setCur(r,c,false);
+}
+function advance(back){
+  const aw = activeWord(); if(!aw||!cur) return;
+  const pts = wordCells(aw);
+  const i = pts.findIndex(([r,c])=>r===cur[0]&&c===cur[1]);
+  const j = i + (back?-1:1);
+  if(j>=0 && j<pts.length){ cur=[pts[j][0],pts[j][1]]; render(); }
+}
+board.addEventListener("mousedown",e=>{
+  const el = e.target.closest(".cell:not(.blk)"); if(!el) return;
+  e.preventDefault();
+  setCur(+el.dataset.r, +el.dataset.c, true);
+});
+function handleKey(key){
+  if(!cur) return false;
+  if(/^[a-zA-Z]$/.test(key)){ state[cur[0]][cur[1]]=key.toUpperCase(); advance(false); render(); return true; }
+  if(key==="Backspace"){
+    if(state[cur[0]][cur[1]]) state[cur[0]][cur[1]]="";
+    else { advance(true); state[cur[0]][cur[1]]=""; }
+    render(); return true;
+  }
+  if(key===" "){ dir = dir==="A"?"D":"A"; render(); return true; }
+  if(key==="ArrowLeft"){ dir==="A"?move(0,-1):(dir="A",render()); return true; }
+  if(key==="ArrowRight"){ dir==="A"?move(0,1):(dir="A",render()); return true; }
+  if(key==="ArrowUp"){ dir==="D"?move(-1,0):(dir="D",render()); return true; }
+  if(key==="ArrowDown"){ dir==="D"?move(1,0):(dir="D",render()); return true; }
+  return false;
+}
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  if(handleKey(e.key)) e.preventDefault();
+});
+kb.addEventListener("input",()=>{
+  const v = kb.value; kb.value="";
+  for(const ch of v) if(/[a-zA-Z]/.test(ch)) handleKey(ch);
+});
+
+// clues
+for(let i=0;i<WORDS.length;i++){
+  const w = WORDS[i];
+  const el = document.createElement("div");
+  el.className="clue"; el.dataset.i=i;
+  el.innerHTML = '<span class="cn">'+w.n+(w.d==="A"?"A":"D")+'</span><span class="ct">'+w.clue+' <span style="color:var(--muted)">('+w.a.length+')</span></span>';
+  el.addEventListener("click",()=>{ dir=w.d; setCur(w.r,w.c,false); });
+  document.getElementById(w.d==="A"?"across":"down").appendChild(el);
+}
+
+document.getElementById("check").addEventListener("click",()=>{
+  for(const key in cells){
+    const [r,c]=key.split(",").map(Number);
+    if(state[r][c] && state[r][c]!==sol[r][c]){ cells[key].classList.add("wrong"); cells[key].dataset.marked=state[r][c]; }
+  }
+});
+document.getElementById("revealletter").addEventListener("click",()=>{
+  if(!cur) return;
+  state[cur[0]][cur[1]]=sol[cur[0]][cur[1]];
+  cells[cur.join(",")].classList.add("revealed");
+  advance(false); render();
+});
+document.getElementById("revealall").addEventListener("click",()=>{
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(sol[r][c]) state[r][c]=sol[r][c];
+  render();
+});
+document.getElementById("reset").addEventListener("click",()=>{
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) state[r][c]="";
+  document.querySelectorAll(".cell.wrong").forEach(el=>el.classList.remove("wrong"));
+  render();
+});
+
+setCur(WORDS[0].r, WORDS[0].c, false);
+</script>
+</body>
+</html>
