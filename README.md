@@ -26,11 +26,14 @@ The section stays hidden until all of these are set in Cloudflare Pages (Setting
 | Variable | From |
 |---|---|
 | `ELEVENLABS_API_KEY` | ElevenLabs. Best as a restricted key limited to Agents |
-| `ELEVENLABS_AGENT_ID` | `site-agent/agents.json` after the agent is created |
+| `ELEVENLABS_WEB_AGENT_ID`, `ELEVENLABS_PHONE_AGENT_ID` | `site-agent/agents.json` after the two agents are created |
 | `ELEVENLABS_PHONE_NUMBER_ID` | ElevenLabs Phone Numbers, after importing the Twilio number |
 | `TWILIO_API_KEY_SID`, `TWILIO_API_KEY_SECRET` | Twilio API key |
 | `TWILIO_VERIFY_SERVICE_SID` | Twilio Verify service, for the text codes |
 | `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile widget for lukestiles.com and the Pages preview domain |
 | `PUBLIC_PHONE_NUMBER` | Optional. The agent's number, shown as "or call …" |
+| `CONSENT_LOG` | Optional but recommended. A KV namespace binding (Settings > Functions > KV bindings) where each call's consent record is kept for 4 years |
+
+Also add Cloudflare rate-limiting rules for `/api/talk` and `/api/call/*` (for example, 5 requests per IP per 10 minutes), and limit Twilio's Messaging and Voice geographic permissions to the United States.
 
 Preview locally with `npx wrangler pages dev .` and a `.dev.vars` file holding the same variables. `.dev.vars` must never be committed.

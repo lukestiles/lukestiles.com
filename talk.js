@@ -20,17 +20,18 @@ async function post(path, body) {
 
 // Cloudflare Turnstile, rendered only when needed; usually invisible.
 let turnstileReady = null;
-function turnstileToken() {
+let widgetId = null;
+function turnstileToken(action) {
   turnstileReady ||= new Promise((resolve, reject) => {
     const s = document.createElement("script");
     s.src = TURNSTILE; s.async = true; s.onload = resolve; s.onerror = () => reject(new Error("Verification didn't load."));
     document.head.appendChild(s);
   });
   return turnstileReady.then(() => new Promise((resolve, reject) => {
-    const box = $("turnstile");
-    box.replaceChildren();
-    window.turnstile.render(box, {
+    if (widgetId !== null) window.turnstile.remove(widgetId);
+    widgetId = window.turnstile.render($("turnstile"), {
       sitekey: config.turnstileSiteKey,
+      action,
       appearance: "interaction-only",
       callback: resolve,
       "error-callback": () => reject(new Error("Verification failed. Refresh and try again.")),
@@ -44,14 +45,14 @@ async function startTalk() {
   button.disabled = true;
   try {
     status("This uses your microphone so you can talk with the agent. Allow access to start.");
-    await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mic = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mic.getTracks().forEach((t) => t.stop()); // permission check only; the SDK opens its own stream
     status("connecting…");
-    const [{ Conversation }, captcha] = await Promise.all([import(SDK), turnstileToken()]);
+    const [{ Conversation }, captcha] = await Promise.all([import(SDK), turnstileToken("talk")]);
     const { token } = await post("/api/talk", { turnstileToken: captcha });
     conversation = await Conversation.startSession({
       conversationToken: token,
       connectionType: "webrtc",
-      dynamicVariables: { entry_point: "web" },
       onConnect: () => { button.textContent = "end conversation"; button.disabled = false; track("talk_started"); },
       onModeChange: ({ mode }) => status(mode === "speaking" ? "speaking…" : "listening…"),
       onDisconnect: () => {
@@ -87,7 +88,7 @@ async function submitCall(event) {
   try {
     if (!codeSent) {
       status("sending a code…");
-      const captcha = await turnstileToken();
+      const captcha = await turnstileToken("call");
       await post("/api/call/start", { ...fields, consent: form.elements.consent.checked, turnstileToken: captcha });
       codeSent = true;
       $("code-row").hidden = false;
@@ -98,7 +99,7 @@ async function submitCall(event) {
       track("call_code_sent");
     } else {
       status("placing the call…");
-      await post("/api/call/confirm", { ...fields, code: f.code });
+      await post("/api/call/confirm", { ...fields, consent: form.elements.consent.checked, code: f.code });
       form.hidden = true;
       status("Calling you now. If you miss it, come back and try again.");
       track("call_placed");
