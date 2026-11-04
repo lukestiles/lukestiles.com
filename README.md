@@ -21,7 +21,7 @@ The TALK section lets visitors talk with an ElevenLabs voice agent in Luke's clo
 - `talk.js` runs the section in the browser.
 - `functions/api/[[path]].js` is a Cloudflare Pages Function with four routes: `GET /api/config`, `POST /api/talk`, `POST /api/call/start` and `POST /api/call/confirm`.
 
-The section stays hidden until all of these are set in Cloudflare Pages (Settings > Environment variables, as encrypted secrets except the site key):
+Set these in Cloudflare Pages (Settings > Environment variables, as encrypted secrets except the site key). The section appears once `ELEVENLABS_API_KEY`, `ELEVENLABS_WEB_AGENT_ID` and the two Turnstile keys are set; "have it call me" appears once the phone agent, phone number and Twilio variables are set too.
 
 | Variable | From |
 |---|---|

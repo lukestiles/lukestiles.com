@@ -26,23 +26,18 @@ const NON_US_NPA = new Set(("204 226 236 249 250 257 263 289 306 343 354 365 367
   "242 246 264 268 284 345 441 473 649 658 664 721 758 767 784 809 829 849 868 869 876 " +
   "500 521 522 523 524 525 526 527 528 529 533 544 566 577 588 600 700 710 800 833 844 855 866 877 888 900").split(" "));
 
-const REQUIRED_ENV = [
-  "ELEVENLABS_API_KEY",
-  "ELEVENLABS_WEB_AGENT_ID",
-  "ELEVENLABS_PHONE_AGENT_ID",
-  "ELEVENLABS_PHONE_NUMBER_ID",
-  "TWILIO_API_KEY_SID",
-  "TWILIO_API_KEY_SECRET",
-  "TWILIO_VERIFY_SERVICE_SID",
-  "TURNSTILE_SITE_KEY",
-  "TURNSTILE_SECRET_KEY",
-];
+// Browser conversations need only these.
+const TALK_ENV = ["ELEVENLABS_API_KEY", "ELEVENLABS_WEB_AGENT_ID", "TURNSTILE_SITE_KEY", "TURNSTILE_SECRET_KEY"];
+// "Call me" additionally needs the phone agent, number and Twilio Verify.
+const CALL_ENV = [...TALK_ENV, "ELEVENLABS_PHONE_AGENT_ID", "ELEVENLABS_PHONE_NUMBER_ID",
+  "TWILIO_API_KEY_SID", "TWILIO_API_KEY_SECRET", "TWILIO_VERIFY_SERVICE_SID"];
 
 export async function onRequest({ request, env, params }) {
   const route = (params.path || []).join("/");
   try {
     if (route === "config" && request.method === "GET") return config(env);
-    if (!isConfigured(env)) return json({ error: "Not available yet." }, 503);
+    const needed = route === "talk" ? TALK_ENV : CALL_ENV;
+    if (!hasEnv(env, needed)) return json({ error: "Not available yet." }, 503);
     if (request.method !== "POST") return json({ error: "Method not allowed." }, 405);
     if (!sameOrigin(request)) return json({ error: "Forbidden." }, 403);
 
@@ -61,7 +56,8 @@ export async function onRequest({ request, env, params }) {
 
 function config(env) {
   return json({
-    enabled: isConfigured(env),
+    enabled: hasEnv(env, TALK_ENV),
+    callEnabled: hasEnv(env, CALL_ENV),
     turnstileSiteKey: env.TURNSTILE_SITE_KEY || null,
     phoneNumber: env.PUBLIC_PHONE_NUMBER || null,
     consentText: CONSENT_TEXT,
@@ -177,8 +173,8 @@ function twilio(env, path, fields) {
   });
 }
 
-function isConfigured(env) {
-  return REQUIRED_ENV.every((k) => env[k]);
+function hasEnv(env, keys) {
+  return keys.every((k) => env[k]);
 }
 
 function sameOrigin(request) {

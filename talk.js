@@ -126,8 +126,12 @@ async function init() {
     phone.querySelector("a").textContent = config.phoneNumber;
   }
   $("talk-start").addEventListener("click", startTalk);
-  $("call-open").addEventListener("click", openCallForm);
-  $("call-form").addEventListener("submit", submitCall);
+  if (config.callEnabled) {
+    $("call-open").addEventListener("click", openCallForm);
+    $("call-form").addEventListener("submit", submitCall);
+  } else {
+    $("call-open").hidden = true;
+  }
   $("talk").hidden = false;
 }
 
