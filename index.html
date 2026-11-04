@@ -66,7 +66,26 @@ p.aside{color:var(--muted)}
   .grid.media{grid-template-columns:68px 1fr}
   .grid.lore{grid-template-columns:44px 1fr; row-gap:10px}
   .links{margin-top:8px; padding-left:14px; gap:6px}
+  .talk{padding-left:14px}
 }
+/* TALK: the AI voice agent. Hidden until /api/config says it's configured. */
+[hidden]{display:none !important}
+.talk{margin:10px 0 0; padding-left:24px}
+.talk p{padding-left:0}
+.cmd{font:inherit; color:var(--accent); background:none; border:0; padding:0; cursor:pointer;
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
+.cmd:hover{text-decoration-thickness:2px}
+.cmd:disabled{color:var(--muted); cursor:default; text-decoration:none}
+.cmds{display:flex; flex-wrap:wrap; gap:6px 24px; margin-top:10px}
+.talk form{margin-top:14px; display:grid; gap:8px; max-width:440px}
+.talk label{display:grid; grid-template-columns:72px 1fr; align-items:baseline; gap:12px; color:var(--muted)}
+.talk input[type=text], .talk input[type=tel], .talk input[type=email]{
+  font:inherit; color:var(--ink); background:transparent; border:0; border-bottom:1px solid var(--muted);
+  padding:2px 0; outline:none; min-width:0}
+.talk input:focus{border-bottom-color:var(--accent)}
+.talk label.consent{grid-template-columns:auto 1fr; font-size:12px; line-height:1.6}
+.talk .status, #talk-phone{color:var(--muted)}
+.talk .status{min-height:1.75em}
 </style>
 </head>
 <body>
@@ -88,6 +107,29 @@ p.aside{color:var(--muted)}
   <h2>ADVISORY</h2>
   <p>I advise on strategy, product, technology, and operations — usually where they stop agreeing with each other. <br><br>Engagements are small and high impact: a hard question, a second opinion before a big decision, a standing call.</p>
   <p class="aside">→ luke [at] lukestiles [dot] com</p>
+
+  <section id="talk" hidden>
+    <h2>TALK</h2>
+    <div class="talk">
+      <p>Talk with an AI version of me, in my cloned voice. It knows my writing and my work, and it can book you a free strategy and discovery session with the real me. Conversations may be recorded and transcribed.</p>
+      <div class="cmds">
+        <button type="button" class="cmd" id="talk-start">talk in the browser</button>
+        <button type="button" class="cmd" id="call-open">have it call me</button>
+        <span id="talk-phone" hidden></span>
+      </div>
+      <p class="status" id="talk-status" aria-live="polite"></p>
+      <form id="call-form" hidden>
+        <label>name <input type="text" name="name" autocomplete="name" maxlength="40" required></label>
+        <label>phone <input type="tel" name="phone" autocomplete="tel" placeholder="US numbers" required></label>
+        <label>email <input type="email" name="email" autocomplete="email" required></label>
+        <label>about <input type="text" name="topic" maxlength="200" placeholder="optional"></label>
+        <label class="consent"><input type="checkbox" name="consent" required> <span id="consent-text"></span></label>
+        <label hidden id="code-row">code <input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></label>
+        <div class="cmds"><button type="submit" class="cmd" id="call-submit">text me a code</button></div>
+      </form>
+      <div id="turnstile"></div>
+    </div>
+  </section>
 
   <h2>THOUGHTS</h2>
   <div class="grid lore">
@@ -115,5 +157,6 @@ p.aside{color:var(--muted)}
 
   <footer><span>lukestiles.com</span><span>August 2026</span></footer>
 </main>
+<script type="module" src="/talk.js"></script>
 </body>
 </html>

@@ -9,3 +9,4 @@ _docs/
 .env
 .env.*
 !.env.example
+.dev.vars
